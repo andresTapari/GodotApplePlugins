@@ -186,7 +186,7 @@ split-generate-stubs:
 			GodotApplePluginsFoundation) \
 				entry_symbol="godot_apple_plugins_foundation_start"; \
 				library_name="godot_apple_plugins_foundation_stub"; \
-				files="Foundation AppleURL AppleFilePicker"; \
+				files="Foundation AppleURL AppleFilePicker NSUbiquitousKeyValueStore"; \
 				;; \
 			GodotApplePluginsGameCenter) \
 				entry_symbol="godot_apple_plugins_game_center_start"; \

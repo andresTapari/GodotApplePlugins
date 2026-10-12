@@ -8,10 +8,13 @@
 @preconcurrency import SwiftGodotRuntime
 import Foundation
 
-@Godot
-class Foundation: RefCounted, @unchecked Sendable {
+// Keep the Godot class name without hiding the Foundation module in Swift.
+enum FoundationBindings {
+    @Godot
+    class Foundation: RefCounted, @unchecked Sendable {
 
-    @Callable static func uuid() -> String {
-        UUID().uuidString
+        @Callable static func uuid() -> String {
+            UUID().uuidString
+        }
     }
 }

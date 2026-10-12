@@ -18,6 +18,7 @@ This add-on currently includes comprehensive support for:
 * StoreKit2 [StoreKit Integration Guide](Sources/GodotStoreKit/StoreKitGuide.md)
 * Sign-in with Apple [AuthenticationServices Integration Guide](Sources/GodotAuthenticationServices/AuthenticationServicesGuide.md)
 * AppleFilePicker: allow your application to invoke the file system picker.
+* iCloud key-value storage [Foundation Integration Guide](Sources/GodotFoundation/FoundationGuide.md)
 * ARKit [ARKit Integration Guide](Sources/GodotARKit/ARKitGuide.md)
 * CoreMotion [CoreMotion Integration Guide](Sources/GodotCoreMotion/CoreMotionGuide.md)
 

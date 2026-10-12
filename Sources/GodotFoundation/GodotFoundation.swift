@@ -3,9 +3,10 @@ import SwiftGodotRuntime
 private func makeGodotApplePluginsFoundationTypes() -> [ExtensionInitializationLevel: [Object.Type]] {
     do {
         return try [
-            Foundation.self,
+            FoundationBindings.Foundation.self,
             AppleURL.self,
             AppleFilePicker.self,
+            NSUbiquitousKeyValueStore.self,
         ].prepareForRegistration()
     } catch {
         fatalError("Failed to prepare Foundation registrations: \(error)")

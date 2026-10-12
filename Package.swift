@@ -32,6 +32,7 @@ let foundationDocResources = [
     "AppleFilePicker",
     "AppleURL",
     "Foundation",
+    "NSUbiquitousKeyValueStore",
     "SignalProxy",
 ].map(docResource)
 
@@ -232,6 +233,7 @@ let package = Package(
         pluginTarget(
             name: "GodotApplePluginsFoundation",
             path: "Sources/GodotFoundation",
+            exclude: ["FoundationGuide.md"],
             resources: foundationDocResources
         ),
         pluginTarget(

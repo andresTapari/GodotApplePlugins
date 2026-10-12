@@ -1,0 +1,232 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<class name="NSUbiquitousKeyValueStore" inherits="RefCounted" api_type="extension" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="https://raw.githubusercontent.com/godotengine/godot/master/doc/class.xsd">
+	<brief_description>
+		Shares small preferences between a user’s Apple devices through iCloud.
+	</brief_description>
+	<description>
+		Uses Apple’s shared default key-value store. Keep this wrapper while you need its signals. Connect [signal did_change_externally] before you call [method synchronize] at launch. Each wrapper registers a native
+		observer and removes it when released. Keep a local copy of preferences so the app works without iCloud. The
+		exported app needs the com.apple.developer.ubiquity-kvstore-identifier entitlement. Use the same store
+		identifier on all app targets that must share values.
+
+		Values can be bool, int, float, String, PackedByteArray, Array, or Dictionary. Dictionary keys must be
+		strings. Nested containers can have at most 64 levels. Null entries and other Godot types are rejected.
+		Setters return false for invalid input. A true result only confirms that the binding passed the write to
+		Apple. It does not confirm cloud delivery or quota acceptance.
+
+		Apple permits 1,024 keys and 1 MB of values in total. A single value can be at most 1 MB. Each key can have
+		at most 128 UTF-16 code units. Use this store for preferences that change infrequently. Keep sensitive data
+		in Keychain. Windows and Linux stubs do not store or synchronize values.
+	</description>
+	<tutorials>
+		<link title="Foundation Integration Guide">
+			https://github.com/migueldeicaza/GodotApplePlugins/blob/main/Sources/GodotFoundation/FoundationGuide.md
+		</link>
+		<link title="Apple: Synchronizing App Preferences with iCloud">
+			https://developer.apple.com/documentation/foundation/synchronizing-app-preferences-with-icloud
+		</link>
+		<link title="Apple: NSUbiquitousKeyValueStore">
+			https://developer.apple.com/documentation/foundation/nsubiquitouskeyvaluestore
+		</link>
+	</tutorials>
+	<methods>
+		<method name="array_for_key">
+			<return type="Array" />
+			<param index="0" name="key" type="String" />
+			<description>
+				Returns the Array value for the key. Returns an empty array if the key is absent. Use [method object_for_key] to check whether a key exists.
+			</description>
+		</method>
+		<method name="bool_for_key">
+			<return type="bool" />
+			<param index="0" name="key" type="String" />
+			<description>
+				Returns the bool value for the key. Returns false if the key is absent. Use [method object_for_key] to
+				check whether a key exists.
+			</description>
+		</method>
+		<method name="data_for_key">
+			<return type="PackedByteArray" />
+			<param index="0" name="key" type="String" />
+			<description>
+				Returns the PackedByteArray value for the key. Returns an empty byte array if the key is absent. Use
+				[method object_for_key] to check whether a key exists.
+			</description>
+		</method>
+		<method name="default_store" qualifiers="static">
+			<return type="NSUbiquitousKeyValueStore" />
+			<description>
+				Returns a new Godot wrapper for Apple’s shared default store. Construction with new() uses the same native
+				store. Keep one wrapper to receive its signal. On Windows and Linux, the stub returns null.
+			</description>
+		</method>
+		<method name="dictionary_for_key">
+			<return type="Dictionary" />
+			<param index="0" name="key" type="String" />
+			<description>
+				Returns the Dictionary value for the key. Returns an empty dictionary if the key is absent. Use [method object_for_key] to check whether a key exists.
+			</description>
+		</method>
+		<method name="double_for_key">
+			<return type="float" />
+			<param index="0" name="key" type="String" />
+			<description>
+				Returns the float value for the key. Returns 0.0 if the key is absent. Use [method object_for_key] to
+				check whether a key exists.
+			</description>
+		</method>
+		<method name="long_long_for_key">
+			<return type="int" />
+			<param index="0" name="key" type="String" />
+			<description>
+				Returns the int value for the key. Returns 0 if the key is absent. Use [method object_for_key] to check
+				whether a key exists.
+			</description>
+		</method>
+		<method name="object_for_key">
+			<return type="Variant" />
+			<param index="0" name="key" type="String" />
+			<description>
+				Returns the value, or null if the key is absent. Data becomes PackedByteArray. Nested arrays and
+				dictionaries are converted recursively. Native Date values become float Unix seconds.
+			</description>
+		</method>
+		<method name="remove_object_for_key">
+			<return type="void" />
+			<param index="0" name="key" type="String" />
+			<description>
+				Removes the key and its value. Local removal does not emit [signal did_change_externally].
+			</description>
+		</method>
+		<method name="set_array">
+			<return type="bool" />
+			<param index="0" name="value" type="Array" />
+			<param index="1" name="key" type="String" />
+			<description>
+				Sets the value for the key. Returns false for invalid input. A true result confirms that the binding
+				passed the write to Apple. It does not confirm quota acceptance or cloud delivery. Local writes do not
+				emit [signal did_change_externally]. All dictionary keys must be String. Containers can contain only
+				supported property list values.
+			</description>
+		</method>
+		<method name="set_bool">
+			<return type="bool" />
+			<param index="0" name="value" type="bool" />
+			<param index="1" name="key" type="String" />
+			<description>
+				Sets the value for the key. Returns false for invalid input. A true result confirms that the binding
+				passed the write to Apple. It does not confirm quota acceptance or cloud delivery. Local writes do not
+				emit [signal did_change_externally].
+			</description>
+		</method>
+		<method name="set_data">
+			<return type="bool" />
+			<param index="0" name="value" type="PackedByteArray" />
+			<param index="1" name="key" type="String" />
+			<description>
+				Sets the value for the key. Returns false for invalid input. A true result confirms that the binding
+				passed the write to Apple. It does not confirm quota acceptance or cloud delivery. Local writes do not
+				emit [signal did_change_externally].
+			</description>
+		</method>
+		<method name="set_dictionary">
+			<return type="bool" />
+			<param index="0" name="value" type="Dictionary" />
+			<param index="1" name="key" type="String" />
+			<description>
+				Sets the value for the key. Returns false for invalid input. A true result confirms that the binding
+				passed the write to Apple. It does not confirm quota acceptance or cloud delivery. Local writes do not
+				emit [signal did_change_externally]. All dictionary keys must be String. Containers can contain only
+				supported property list values.
+			</description>
+		</method>
+		<method name="set_double">
+			<return type="bool" />
+			<param index="0" name="value" type="float" />
+			<param index="1" name="key" type="String" />
+			<description>
+				Sets the value for the key. Returns false for invalid input. A true result confirms that the binding
+				passed the write to Apple. It does not confirm quota acceptance or cloud delivery. Local writes do not
+				emit [signal did_change_externally].
+			</description>
+		</method>
+		<method name="set_long_long">
+			<return type="bool" />
+			<param index="0" name="value" type="int" />
+			<param index="1" name="key" type="String" />
+			<description>
+				Sets the value for the key. Returns false for invalid input. A true result confirms that the binding
+				passed the write to Apple. It does not confirm quota acceptance or cloud delivery. Local writes do not
+				emit [signal did_change_externally].
+			</description>
+		</method>
+		<method name="set_object">
+			<return type="bool" />
+			<param index="0" name="value" type="Variant" />
+			<param index="1" name="key" type="String" />
+			<description>
+				Sets a supported property list value. A top-level null removes the key. Unsupported types, null entries in
+				containers, non-string dictionary keys, and containers deeper than 64 levels cause the entire write to
+				fail. Returns false for invalid input. A true result does not confirm quota acceptance or cloud delivery.
+			</description>
+		</method>
+		<method name="set_string">
+			<return type="bool" />
+			<param index="0" name="value" type="String" />
+			<param index="1" name="key" type="String" />
+			<description>
+				Sets the value for the key. Returns false for invalid input. A true result confirms that the binding
+				passed the write to Apple. It does not confirm quota acceptance or cloud delivery. Local writes do not
+				emit [signal did_change_externally].
+			</description>
+		</method>
+		<method name="string_for_key">
+			<return type="String" />
+			<param index="0" name="key" type="String" />
+			<description>
+				Returns the String value for the key. Returns an empty string if the key is absent. Use [method object_for_key] to check whether a key exists.
+			</description>
+		</method>
+		<method name="synchronize">
+			<return type="bool" />
+			<description>
+				Returns Apple’s synchronization result. Connect [signal did_change_externally] first. Call this at launch
+				or when the app returns to the foreground. This does not force an immediate upload or confirm delivery to
+				other devices. A false result can indicate missing app entitlements.
+			</description>
+		</method>
+	</methods>
+	<members>
+		<member name="dictionary_representation" type="Dictionary" setter="" getter="get_dictionary_representation">
+			A snapshot of all stored keys and values. Data becomes PackedByteArray. Native Date values become float
+			Unix seconds.
+		</member>
+	</members>
+	<signals>
+		<signal name="did_change_externally">
+			<param index="0" name="reason" type="int" enum="ChangeReason" />
+			<param index="1" name="changed_keys" type="PackedStringArray" />
+			<description>
+				Reports Apple’s external change notification on the main thread when this signal has a connection. The
+				reason is a [enum ChangeReason] value. Read the changed keys from the store to get their current values;
+				keys can have been removed. The key list is empty when Apple omits it. Handle account and quota reasons
+				even when the list is empty. Local writes do not emit this signal.
+			</description>
+		</signal>
+	</signals>
+	<constants>
+		<constant name="SERVER_CHANGE" value="0" enum="ChangeReason">
+			Values changed in iCloud. Read the changed keys and update local preferences.
+		</constant>
+		<constant name="INITIAL_SYNC_CHANGE" value="1" enum="ChangeReason">
+			Values were downloaded during initial synchronization. Read them before you upload defaults.
+		</constant>
+		<constant name="QUOTA_VIOLATION_CHANGE" value="2" enum="ChangeReason">
+			The store exceeded its quota. Reduce stored data and keep local preferences available.
+		</constant>
+		<constant name="ACCOUNT_CHANGE" value="3" enum="ChangeReason">
+			The user changed the Apple account. Apply the app’s account policy. Do not upload the previous account’s
+			preferences automatically.
+		</constant>
+	</constants>
+</class>
