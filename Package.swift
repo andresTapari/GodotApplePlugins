@@ -153,7 +153,7 @@ func pluginTarget(name: String, path: String, exclude: [String] = [], resources:
 let package = Package(
     name: "GodotApplePlugins",
     platforms: [
-        .iOS(.v17),
+        .iOS(.v15),
         .macOS("14.0"),
         .visionOS(.v1),
     ],

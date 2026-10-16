@@ -1,0 +1,66 @@
+name: Build AuthenticationServices (iOS 15 target)
+
+# Compila solo GodotApplePluginsAuthenticationServices + SwiftGodotRuntime para iOS (device)
+# con deployment target bajo, arma los xcframework y verifica el minos del binario.
+on:
+  workflow_dispatch:
+  push:
+    branches: [ios15-target]
+
+env:
+  MIN_IOS: "15.0"
+
+jobs:
+  build:
+    runs-on: macos-15
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Select latest Xcode
+        run: |
+          latest="$(ls -d /Applications/Xcode_*.app | sort -V | tail -1)"
+          sudo xcode-select -s "$latest"
+          xcodebuild -version
+
+      - name: Build for iOS device
+        run: |
+          make build \
+            FRAMEWORK_NAMES="GodotApplePluginsAuthenticationServices" \
+            DESTINATIONS="generic/platform=iOS" \
+            XCODEBUILD_SETTINGS='IPHONEOS_DEPLOYMENT_TARGET=${{ env.MIN_IOS }} CODE_SIGNING_ALLOWED=NO OTHER_LDFLAGS="-Xlinker -headerpad_max_install_names"' \
+            XCODEBUILD_LOG_ON_ERROR=1
+
+      - name: Create xcframeworks
+        run: |
+          set -euo pipefail
+          P=.xcodebuild/Build/Products/Release-iphoneos/PackageFrameworks
+          ls "$P"
+          mkdir -p out
+          for fw in GodotApplePluginsAuthenticationServices SwiftGodotRuntime; do
+            xcodebuild -create-xcframework -framework "$P/$fw.framework" -output "out/$fw.xcframework"
+          done
+
+      - name: Verify minos (must be <= ${{ env.MIN_IOS }})
+        run: |
+          set -euo pipefail
+          fail=0
+          for bin in out/*.xcframework/ios-arm64/*.framework/*; do
+            [ -f "$bin" ] || continue
+            case "$bin" in *Info.plist|*CodeResources) continue;; esac
+            echo "== $bin"
+            file "$bin" | grep -q "Mach-O" || continue
+            vtool -show-build "$bin" | tee /tmp/vt.txt
+            minos="$(awk '/minos/ {print $2}' /tmp/vt.txt | head -1)"
+            echo "minos=$minos"
+            if [ "$(printf '%s\n%s\n' "$minos" "$MIN_IOS" | sort -V | tail -1)" != "$MIN_IOS" ]; then
+              echo "::error::$bin minos $minos > $MIN_IOS"; fail=1
+            fi
+          done
+          exit $fail
+
+      - name: Upload
+        uses: actions/upload-artifact@v4
+        with:
+          name: apple-signin-ios15-xcframeworks
+          path: out/
+          if-no-files-found: error
