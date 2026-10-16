@@ -27,7 +27,7 @@ jobs:
           make build \
             FRAMEWORK_NAMES="GodotApplePluginsAuthenticationServices" \
             DESTINATIONS="generic/platform=iOS" \
-            XCODEBUILD_SETTINGS='IPHONEOS_DEPLOYMENT_TARGET=${{ env.MIN_IOS }} CODE_SIGNING_ALLOWED=NO OTHER_LDFLAGS="-Xlinker -headerpad_max_install_names"' \
+            XCODEBUILD_SETTINGS='IPHONEOS_DEPLOYMENT_TARGET=${{ env.MIN_IOS }} CODE_SIGNING_ALLOWED=NO -skipMacroValidation -skipPackagePluginValidation OTHER_LDFLAGS="-Xlinker -headerpad_max_install_names"' \
             XCODEBUILD_LOG_ON_ERROR=1
 
       - name: Create xcframeworks
