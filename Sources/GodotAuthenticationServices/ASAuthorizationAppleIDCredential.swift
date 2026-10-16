@@ -73,6 +73,7 @@ class ASAuthorizationAppleIDCredential: RefCounted, @unchecked Sendable {
         case CHILD = 1
         case NOT_CHILD = 2
 
+        @available(iOS 17.0, macOS 14.0, visionOS 1.0, *)
         static func from(_ range: ASUserAgeRange) -> UserAgeRange {
             switch range {
             case .unknown: return .NOT_KNOWN
@@ -90,7 +91,11 @@ class ASAuthorizationAppleIDCredential: RefCounted, @unchecked Sendable {
 
     @Export
     var userAgeRange: UserAgeRange {
-        UserAgeRange.from(credential?.userAgeRange ?? .unknown)
+        // ASUserAgeRange es iOS 17+: en iOS 15/16 devolvemos NOT_KNOWN.
+        if #available(iOS 17.0, macOS 14.0, visionOS 1.0, *) {
+            return UserAgeRange.from(credential?.userAgeRange ?? .unknown)
+        }
+        return .NOT_KNOWN
     }
 
     @Export
