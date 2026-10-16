@@ -12,7 +12,7 @@ env:
 
 jobs:
   build:
-    runs-on: macos-15
+    runs-on: macos-26
     steps:
       - uses: actions/checkout@v4
 
@@ -20,7 +20,7 @@ jobs:
         run: |
           latest="$(ls -d /Applications/Xcode_*.app | sort -V | tail -1)"
           sudo xcode-select -s "$latest"
-          xcodebuild -version
+          ls -d /Applications/Xcode_*.app; xcodebuild -version; swift --version
 
       - name: Build for iOS device
         run: |
