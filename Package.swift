@@ -17,7 +17,7 @@ let linkerSettings: [LinkerSetting] = [
 
 let runtimeDependency: Target.Dependency = .product(
     name: "SwiftGodotRuntime",
-    package: "SwiftGodotBinary"
+    package: "SwiftGodot"
 )
 
 func docResource(_ name: String) -> Resource {
@@ -204,7 +204,7 @@ let package = Package(
         ),
     ],
     dependencies: [
-        .package(url: "https://github.com/migueldeicaza/SwiftGodotBinary", revision: "bf7cd9cb51b30039199c47811c486976923af93e")
+        .package(url: "https://github.com/andresTapari/SwiftGodot", revision: "c0fa4081975219a2b10db41b8244cbc945028efc")
         // For local development:
         //.package(path: "../SwiftGodot")
     ],
